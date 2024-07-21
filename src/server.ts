@@ -53,7 +53,7 @@ app.use((req, res, next) => {
 // Middleware para servir a documentação Swagger UI
 app.use('/docs', express.static('public'));
 
-  // Insere o log no banco de dados
+// Insere o log no banco de dados
   const query = {
     text: 'INSERT INTO logs (date, method, url, body) VALUES ($1, $2, $3, $4)',
     values: [date, method, url, JSON.stringify(body)],

@@ -41,5 +41,6 @@
       "experimentalDecorators": true,
       /* Skip type checking all .d.ts files. */
       "resolveJsonModule": true
-    }
+    },
+    "include": ["src/**/*.ts", "src/tests/**/*.ts", "src/tests/eventos.test.js"]
   }
