@@ -35,5 +35,17 @@ jobs:
       - name: Instalar dependências
         run: npm install
 
+      - name: Executar full
+        run: npm run full
+
+      - name: Executar usuarios
+        run: npm run usuarios
+
+      - name: Executar eventos
+        run: npm run eventos
+        
+      - name: Executar inscricoes
+        run: npm run inscricoes
+
       - name: Executar testes
         run: npm test
