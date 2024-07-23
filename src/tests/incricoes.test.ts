@@ -33,12 +33,6 @@ describe('Teste da API de Incricoes', () => {
     return eventos[eventos.length - 1].id;
   };
 
-  test('Obter todas as inscricoes', async () => {
-    const res = await axios.get(`${baseURL}/full/inscricoes`, { headers });
-    expect(res.status).toBe(200);
-    expect(Array.isArray(res.data)).toBe(true);
-  }, 10000);
-
   test('Criar uma nova incricao', async () => {
     const eventoID = await getEventID();
     const usuarioID = await getUserID();
@@ -54,6 +48,12 @@ describe('Teste da API de Incricoes', () => {
     );
     expect(res.status).toBe(200);
     createdRegistrationId = res.data.id.toString(); // Guarde o ID do incricao criado
+  }, 10000);
+  
+  test('Obter todas as inscricoes', async () => {
+    const res = await axios.get(`${baseURL}/full/inscricoes`, { headers });
+    expect(res.status).toBe(200);
+    expect(Array.isArray(res.data)).toBe(true);
   }, 10000);
 
   test('Buscar incricao pelo ID', async () => {

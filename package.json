@@ -4,6 +4,7 @@
   "description": "",
   "main": "app.js",
   "scripts": {
+    "start": "nodemon src/app.ts",
     "full": "npx ts-node src/app.ts",
     "email": "npx ts-node src/appEmail.ts",
     "eventos": "npx ts-node src/appEventos.ts",
@@ -20,7 +21,7 @@
     "@types/jest": "^29.5.12",
     "@types/node": "^20.5.0",
     "jest": "^29.7.0",
-    "nodemon": "^3.1.0",
+    "nodemon": "^3.1.4",
     "supertest": "^7.0.0",
     "ts-jest": "^29.2.3",
     "ts-node": "^10.9.2",

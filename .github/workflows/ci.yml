@@ -1,51 +1,54 @@
-name: Node.js CI
+name: CI Pipeline
 
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     services:
-      postgres:
-        image: postgres:13
+      db:
+        image: postgres:latest
         env:
+          POSTGRES_DB: eventos
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: eventos
         ports:
           - 5432:5432
         options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-
-    env:
-      DATABASE_URL: postgres://postgres:postgres@localhost:5432/eventos
+          --health-cmd="pg_isready"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
 
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout repository
+        uses: actions/checkout@v2
 
-      - name: Configurar Node.js
-        uses: actions/setup-node@v2
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
         with:
-          node-version: '14'
+          node-version: '16'
 
-      - name: Instalar dependências
+      - name: Install dependencies
         run: npm install
 
-      - name: Executar full
-        run: npm run full
+      - name: Install pm2
+        run: npm install -g pm2
 
-      - name: Executar usuarios
-        run: npm run usuarios
+      - name: Deploy the API with pm2
+        run: pm2 start ecosystem.config.js
+      
+      - name: Wait for API to be ready
+        run: |
+          echo "Waiting for API to be ready..."
+          sleep 10
 
-      - name: Executar eventos
-        run: npm run eventos
-        
-      - name: Executar inscricoes
-        run: npm run inscricoes
-
-      - name: Executar testes
+      - name: Run tests
         run: npm test

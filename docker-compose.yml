@@ -3,10 +3,10 @@ version: '3.8'
 services:
   app:
     build: .
+    environment:
+      - DB_HOST=172.31.0.1
     ports:
       - "3000:3000"
-    depends_on:
-      - db
 
   db:
     image: postgres:latest

@@ -11,11 +11,11 @@ import { basicAuth } from "./middlewares/basics-auth";
 import { Pool } from 'pg';
 
 const pool = new Pool({
-  user: 'postgres',
-  host: 'localhost',
-  database: 'eventos',
-  password: 'postgres',
-  port: 5432,
+  user: process.env.DB_USERNAME,
+  host: process.env.DB_HOST,
+  database: process.env.DB_DATABASE,
+  password: process.env.DB_PASSWORD,
+  port: Number(process.env.DB_PORT) // Certifique-se de que DB_PORT está sendo convertido para número
 });
 
 const app: Express = express();
@@ -40,6 +40,7 @@ const createTableQuery = `
     body TEXT
   )
 `;
+
 pool.query(createTableQuery)
   .then(() => console.log("Tabela 'logs' criada com sucesso ou já existente."))
   .catch(err => console.error("Erro ao criar tabela 'logs':", err));
@@ -50,14 +51,12 @@ app.use((req, res, next) => {
   const date = new Date();
   console.log(`[${date}] ${method} ${url} - Body:`, body);
 
-// Middleware para servir a documentação Swagger UI
-app.use('/docs', express.static('public'));
-
-// Insere o log no banco de dados
+  // Insere o log no banco de dados
   const query = {
     text: 'INSERT INTO logs (date, method, url, body) VALUES ($1, $2, $3, $4)',
     values: [date, method, url, JSON.stringify(body)],
   };
+
   pool.query(query)
     .then(() => next())
     .catch((err) => {
@@ -73,8 +72,6 @@ app.use(usuariosRoutes);
 app.use(eventoRoutes);
 app.use(inscricoesRoutes);
 app.use(emailRoutes);
-
-// Iniciar servidor
 
 export default {
   start() {

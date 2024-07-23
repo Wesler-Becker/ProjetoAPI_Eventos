@@ -1,13 +1,19 @@
-FROM node:14
+FROM node:16
 
 WORKDIR /app
 
 COPY package*.json ./
 
+COPY . .
+
 RUN npm install
 
-COPY . .
+RUN npm -v
+
+RUN npm uninstall bcrypt
+
+RUN npm install bcrypt
 
 EXPOSE 3000
 
-CMD ["npm", "start"]
+CMD ["npm", "run", "full"]

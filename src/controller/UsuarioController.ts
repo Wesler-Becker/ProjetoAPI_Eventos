@@ -64,6 +64,7 @@ export class UsuarioController {
       usuario.email = body.email;
       usuario.senha = senha;
       usuario.telefone = body.telefone;
+      usuario.status = body.status;
       usuario.admin = body.admin;
 
       await usuario.save();
