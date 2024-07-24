@@ -63,7 +63,7 @@ export class EventosController {
       eventos.hora = body.hora;
       eventos.local = body.local;
       eventos.descricao = body.descricao;
-      //eventos.status = body.status
+      eventos.status = body.status
 
       await eventos.save();
 
