@@ -13,7 +13,7 @@ export async function basicAuth(
   const password = req.headers['password'];
 
   if (username !== "FULLadmin" || password !== "FULLadmin") {
-    return res.status(401).json({ mensagem: "Credenciais inválidas" });
+    return res.status(401).json({ mensagem: "Credenciais inválidasss" });
   }
 
   return next();
