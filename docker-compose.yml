@@ -4,7 +4,7 @@ services:
   app:
     build: .
     environment:
-      - DB_HOST=172.31.0.1
+      - DB_HOST=db
     ports:
       - "3000:3000"
 
