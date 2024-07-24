@@ -53,5 +53,5 @@ jobs:
       - name: Run tests
         run: npm test
 
-  call-reusable-workflow:
-    uses: ./.github/workflows/deploy.yml
+      - name: Run the Deploy
+        uses: ./.github/workflows/deploy.yml

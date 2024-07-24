@@ -8,5 +8,20 @@ jobs:
     runs-on: self-hosted
 
     steps:
-      - name: test
-        run: echo 'test' > test.txt
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          path: ./homolog
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+
+      - name: Install dependencies
+        run: npm install
+        working-directory: ./homolog
+
+      - name: Run the application
+        run: npm start
+        working-directory: ./homolog
