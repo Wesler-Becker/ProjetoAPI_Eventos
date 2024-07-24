@@ -1,56 +1,58 @@
-  name: CI
+name: CI Pipeline
 
-  on:
-    push:
-      branches:
-        - main
-    pull_request:
-      branches:
-        - main
-  jobs:
-    test:
-      runs-on: ubuntu-latest
-  
-      services:
-        db:
-          image: postgres:latest
-          ports:
-            - 5432:5432
-          env:
-            POSTGRES_USER: postgres
-            POSTGRES_PASSWORD: postgres
-            POSTGRES_DB: eventos
-  
-      steps:
-        - name: Checkout code
-          uses: actions/checkout@v3
-  
-        - name: Set up Node.js
-          uses: actions/setup-node@v3
-          with:
-            node-version: '16'
-  
-        - name: Install dependencies
-          run: npm install
-  
-        - name: Install pm2
-          run: npm install -g pm2
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
 
-        - name: Deploy the API with pm2
-          run: pm2 start ecosystem.config.js
+jobs:
+  build:
+    runs-on: ubuntu-latest
 
-        - name: Wait for API to be ready
-          run: |
-            echo "Waiting for API to be ready..."
-            sleep 10
+    services:
+      db:
+        image: postgres:latest
+        env:
+          POSTGRES_DB: eventos
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd="pg_isready"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
 
-        - name: Run tests
-          run: npm test
-  
-        - name: Upload test results
-          if: success()
-          uses: actions/upload-artifact@v2
-          with:
-            name: test-results
-            path: ./test-results/
-  
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Install pm2
+        run: npm install -g pm2
+
+      - name: Deploy the API with pm2
+        run: pm2 start ecosystem.config.js
+
+      - name: Wait for API to be ready
+        run: |
+          echo "Waiting for API to be ready..."
+          sleep 10
+
+      - name: Run tests
+        run: npm test
+
+  deploy:
+    needs: build
+    uses: ./.github/workflows/deploy.yml
