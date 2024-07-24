@@ -36,9 +36,6 @@ export class Evento extends BaseEntity {
 	@Column({ type: "timestamp", default: "now()" })
 	dataCriacao: string;
 
-	@Column({ length: 255 })
-	teste: string;
-
 	@OneToMany(() => Inscricoes, (inscricoes) => inscricoes.evento_id)
 	inscricoesRealizadas: Inscricoes[];
 }

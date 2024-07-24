@@ -29,8 +29,7 @@ export class EventosController {
         hora: body.hora,
         local: body.local,
         status: true,
-        descricao: body.descricao,
-        teste: 'teste'
+        descricao: "body.descricao"
       }).save();
 
       return res.status(200).json(evento);
