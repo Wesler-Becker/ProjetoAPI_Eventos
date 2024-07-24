@@ -1,58 +1,70 @@
-name: CI Pipeline
+  name: CI Pipeline
 
-on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
+  on:
+    push:
+      branches:
+        - main
+    pull_request:
+      branches:
+        - main
+  jobs:
+    test:
+      runs-on: self-hosted
+  
+      services:
+        db:
+          image: postgres:13
+          ports:
+            - 5432:5432
+          options: > 
+            --health-cmd="pg_isready -U postgres" 
+            --health-interval=10s 
+            --health-timeout=5s 
+            --health-retries=5
+          env:
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: postgres
+            POSTGRES_DB: eventos
+  
+      steps:
+        - name: Checkout code
+          uses: actions/checkout@v3
+  
+        - name: Set up Node.js
+          uses: actions/setup-node@v3
+          with:
+            node-version: '16'
+  
+        - name: Install dependencies
+          run: npm install
+  
+        - name: Wait for PostgreSQL to be ready
+          run: |
+            echo "Waiting for PostgreSQL to be ready..."
+            until pg_isready -h localhost -p 5432 -U postgres; do
+              sleep 1
+            done
+          env:
+            PGPASSWORD: postgres
+  
+        - name: Install pm2
+          run: npm install -g pm2
 
-jobs:
-  build:
-    runs-on: ubuntu-latest
+        - name: Deploy the API with pm2
+          run: pm2 start ecosystem.config.js
 
-    services:
-      db:
-        image: postgres:latest
-        env:
-          POSTGRES_DB: eventos
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
-        ports:
-          - 5432:5432
-        options: >-
-          --health-cmd="pg_isready"
-          --health-interval=10s
-          --health-timeout=5s
-          --health-retries=5
+        - name: Wait for API to be ready
+          run: |
+            echo "Waiting for API to be ready..."
+            sleep 10
 
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '16'
-
-      - name: Install dependencies
-        run: npm install
-
-      - name: Install pm2
-        run: npm install -g pm2
-
-      - name: Deploy the API with pm2
-        run: pm2 start ecosystem.config.js
-
-      - name: Wait for API to be ready
-        run: |
-          echo "Waiting for API to be ready..."
-          sleep 10
-
-      - name: Run tests
-        run: npm test
-
-  deploy:
-    needs: build
-    uses: ./.github/workflows/deploy.yml
+        - name: Run tests
+          run: npm test
+  
+        - name: Upload test results
+          if: success()
+          uses: actions/upload-artifact@v2
+          with:
+            name: test-results
+            path: ./test-results/
+  
