@@ -1,0 +1,12 @@
+name: deploy pipeline
+
+on:
+  workflow_call:
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+
+    steps:
+      - name: test
+        run: echo 'test' > test.txt
