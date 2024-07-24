@@ -8,23 +8,10 @@ jobs:
     runs-on: self-hosted
 
     steps:
-      - name: Down all containers
-        run: docker compose down
-
-      - name: Sleep for 5 seconds
-        run: sleep 5
-
-      - name: Remove all img
-        run: docker image prune -f
-
-      - name: Start Docker Compose
-        run: docker compose up -d
-
-      - name: Verify services are running
-        run: docker ps -a
-      
       - name: Checkout code
         uses: actions/checkout@v2
+        with:
+          path: ./homolog
 
       - name: Update code
         run: git pull
@@ -42,3 +29,16 @@ jobs:
 
       - name: Deploy the API with pm2
         run: pm2 start ecosystem.config.js
+        working-directory: ./homolog
+
+      - name: Down all containers
+        run: docker compose down
+
+      - name: Remove all img
+        run: docker image prune -f
+
+      - name: Start Docker Compose
+        run: docker compose up -d
+
+      - name: Verify services are running
+        run: docker ps -a
