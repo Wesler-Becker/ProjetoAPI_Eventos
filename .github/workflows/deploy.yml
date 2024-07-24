@@ -10,8 +10,9 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-        with:
-          path: ./homolog
+
+      - name: Update code
+        run: git pull
 
       - name: Set up Node.js
         uses: actions/setup-node@v3
@@ -26,7 +27,6 @@ jobs:
 
       - name: Deploy the API with pm2
         run: pm2 start ecosystem.config.js
-        working-directory: ./homolog
 
       - name: Down all containers
         run: docker compose down
