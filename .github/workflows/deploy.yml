@@ -28,6 +28,12 @@ jobs:
         run: pm2 start ecosystem.config.js
         working-directory: ./homolog
 
+      - name: Down all containers
+        run: docker compose down
+
+      - name: Remove all img
+        run: docker image prune
+
       - name: Start Docker Compose
         run: docker compose up -d
 
