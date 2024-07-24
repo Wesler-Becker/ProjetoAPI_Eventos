@@ -33,15 +33,6 @@
         - name: Install dependencies
           run: npm install
   
-        - name: Wait for PostgreSQL to be ready
-          run: |
-            echo "Waiting for PostgreSQL to be ready..."
-            until pg_isready -h localhost -p 5432 -U postgres; do
-              sleep 1
-            done
-          env:
-            PGPASSWORD: postgres
-  
         - name: Install pm2
           run: npm install -g pm2
 
