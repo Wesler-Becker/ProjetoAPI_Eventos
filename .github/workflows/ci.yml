@@ -44,7 +44,7 @@ jobs:
 
       - name: Deploy the API with pm2
         run: pm2 start ecosystem.config.js
-      
+
       - name: Wait for API to be ready
         run: |
           echo "Waiting for API to be ready..."
@@ -53,5 +53,6 @@ jobs:
       - name: Run tests
         run: npm test
 
-      - name: Run the Deploy
-        uses: ./.github/workflows/deploy.yml
+  deploy:
+    needs: build
+    uses: ./.github/workflows/deploy.yml
