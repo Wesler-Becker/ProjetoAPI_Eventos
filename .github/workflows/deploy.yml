@@ -18,8 +18,11 @@ jobs:
         with:
           node-version: '16'
 
-      - name: Install dependencies
-        run: npm install
+      - name: Install pm2
+        run: npm install -g pm2
+
+      - name: Deploy the API with pm2
+        run: pm2 start ecosystem.config.js
         working-directory: ./homolog
 
       - name: Run the application
