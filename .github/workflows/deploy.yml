@@ -29,7 +29,10 @@ jobs:
         run: pm2 start ecosystem.config.js
 
       - name: Down all containers
-        run: docker compose down
+        run: docker stop $(docker ps -a -q)
+
+      - name: Rm all containers
+        run: docker rm $(docker ps -a -q)
 
       - name: Remove all img
         run: docker image prune -f
