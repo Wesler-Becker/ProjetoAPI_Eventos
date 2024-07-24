@@ -1,4 +1,4 @@
-  name: CI Pipeline
+  name: CI
 
   on:
     push:
@@ -9,7 +9,7 @@
         - main
   jobs:
     test:
-      runs-on: self-hosted
+      runs-on: ubuntu-latest
   
       services:
         db:
