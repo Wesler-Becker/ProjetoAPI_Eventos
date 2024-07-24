@@ -1,38 +1,33 @@
-          name: Deploy
+name: Deploy
 
-          on:
-            workflow_run:
-              workflows: ["CI Pipeline"]
-              types:
-                - completed
-          
-          jobs:
-            deploy:
-              if: ${{ github.event.workflow_run.conclusion == 'success' }}
-              runs-on: self-hosted
-          
-              steps:
-                - name: Checkout code
-                  uses: actions/checkout@v2
-          
-                - name: Set up Node.js
-                  uses: actions/setup-node@v3
-                  with:
-                    node-version: '16'
-          
-                - name: Install dependencies
-                  run: npm install
-          
-                - name: Install pm2
-                  run: npm install -g pm2
-          
-                - name: Deploy the API with pm2
-                  run: pm2 start ecosystem.config.js
-                  working-directory: ./homolog
-          
-                - name: Start Docker Compose
-                  run: docker-compose up -d
-          
-                - name: Verify services are running
-                  run: docker ps -a
-          
+on:
+  workflow_call:
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Install pm2
+        run: npm install -g pm2
+
+      - name: Deploy the API with pm2
+        run: pm2 start ecosystem.config.js
+        working-directory: ./homolog
+
+      - name: Start Docker Compose
+        run: docker-compose up -d
+
+      - name: Verify services are running
+        run: docker ps -a
