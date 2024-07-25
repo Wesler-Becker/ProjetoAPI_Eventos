@@ -22,7 +22,7 @@ const authenticate = (req: Request, res: Response, next: NextFunction) => {
   if (username === 'admin' && password === 'admin') {
     next();
   } else {
-    res.status(401).json({ error: 'Credenciais inválidasss' });
+    res.status(401).json({ error: 'Credenciais inválidas' });
   }
 };
 

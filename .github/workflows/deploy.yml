@@ -34,6 +34,9 @@ jobs:
       - name: Remove all img
         run: docker image prune -f
 
+      - name: system prune
+        run: docker system prune -a -f
+
       - name: Start Docker Compose
         run: docker compose up -d
 
