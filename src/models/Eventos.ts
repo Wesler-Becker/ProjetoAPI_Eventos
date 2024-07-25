@@ -33,9 +33,6 @@ export class Evento extends BaseEntity {
 	@Column({ length: 255 })
 	descricao: string;
 
-	@Column()
-	teste: boolean;
-
 	@Column({ type: "timestamp", default: "now()" })
 	dataCriacao: string;
 
