@@ -37,7 +37,7 @@ describe('Teste do Banco de Dados', () => {
         AND table_name='eventos';
     `);
     const columns = res.rows.map(row => row.column_name);
-    const expectedColumns = ['id', 'nome', 'dataInicio', 'dataFim', 'hora', 'local', 'status', 'descricao', 'dataCriacao'];
+    const expectedColumns = ['id', 'nome', 'dataInicio', 'dataFim', 'hora', 'local', 'status', 'descricao', 'dataCriacao', 'teste'];
     expectedColumns.forEach(col => {
       expect(columns).toContain(col);
     });
