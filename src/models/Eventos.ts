@@ -33,11 +33,11 @@ export class Evento extends BaseEntity {
 	@Column({ length: 255 })
 	descricao: string;
 
+	@Column({ length: 255 })
+	teste: boolean;
+
 	@Column({ type: "timestamp", default: "now()" })
 	dataCriacao: string;
-
-	@Column({ length: 255 })
-	teste: string;
 
 	@OneToMany(() => Inscricoes, (inscricoes) => inscricoes.evento_id)
 	inscricoesRealizadas: Inscricoes[];
